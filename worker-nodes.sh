@@ -4,7 +4,7 @@
 
 set -euxo pipefail
 
-KUBERNETES_VERSION="1.28.2-1.1"
+KUBERNETES_VERSION="1.28.4-1.1"
 
 sudo swapoff -a
 
