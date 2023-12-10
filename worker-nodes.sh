@@ -29,8 +29,12 @@ EOF
 
 sudo sysctl --system
 
+# CRI CRI-O (https://github.com/cri-o/cri-o)
+
 sudo apt-get update -y
 sudo apt-get install -y apt-transport-https ca-certificates software-properties-common curl gpg
+
+sudo mkdir /etc/apt/keyrings
 
 sudo curl -fsSL https://pkgs.k8s.io/addons:/cri-o:/stable:/v1.28/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/cri-o-apt-keyring.gpg
 echo "deb [signed-by=/etc/apt/keyrings/cri-o-apt-keyring.gpg] https://pkgs.k8s.io/addons:/cri-o:/stable:/v1.28/deb/ /" | sudo tee /etc/apt/sources.list.d/cri-o.list
@@ -40,10 +44,14 @@ sudo apt-get install -y cri-o
 sudo apt-mark hold cri-o
 
 sudo systemctl daemon-reload
-sudo systemctl enable crio --now
+sudo systemctl enable --now crio.service
+
+# OCI crun (https://github.com/containers/crun)
 
 sudo apt-get update -y
 sudo apt-get install -y crun
+
+# Kubernetes (https://github.com/kubernetes/kubernetes)
 
 sudo curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
@@ -51,6 +59,9 @@ echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.
 sudo apt-get update -y
 sudo apt-get install -y kubelet=$KUBERNETES_VERSION kubeadm=$KUBERNETES_VERSION kubectl=$KUBERNETES_VERSION
 sudo apt-mark hold kubelet kubeadm kubectl
+
+sudo systemctl daemon-reload
+sudo systemctl enable --now kubelet.service
 
 sudo apt-get update -y
 sudo apt-get install -y jq
