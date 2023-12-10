@@ -34,8 +34,6 @@ sudo sysctl --system
 sudo apt-get update -y
 sudo apt-get install -y apt-transport-https ca-certificates software-properties-common curl gpg
 
-sudo mkdir /etc/apt/keyrings
-
 sudo curl -fsSL https://pkgs.k8s.io/addons:/cri-o:/stable:/v1.28/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/cri-o-apt-keyring.gpg
 echo "deb [signed-by=/etc/apt/keyrings/cri-o-apt-keyring.gpg] https://pkgs.k8s.io/addons:/cri-o:/stable:/v1.28/deb/ /" | sudo tee /etc/apt/sources.list.d/cri-o.list
 
