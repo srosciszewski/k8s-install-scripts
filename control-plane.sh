@@ -36,7 +36,13 @@ sudo chown "$(id -u)":"$(id -g)" "$HOME"/.kube/config
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.4/manifests/tigera-operator.yaml
 curl https://raw.githubusercontent.com/projectcalico/calico/v3.26.4/manifests/custom-resources.yaml -O
 
+# Configures Calico networking (custom-resources.yaml)
+
+sed -i "/calicoNetwork:/a\    bgp: Disabled" custom-resources.yaml
+sed -i "/bgp: Disabled/a\    nodeAddressAutodetectionV4:" custom-resources.yaml
+sed -i "/nodeAddressAutoDetectionV4:/a\     interface: eth0" custom-resources.yaml
 sed -i "s/cidr: 192\.168\.0\.0\/16/cidr: 10.10.0.0\/16/g" custom-resources.yaml
+sed -i "s/encapsulation: VXLANCrossSubnet/encapsulation: None/g" custom-resources.yaml
 
 kubectl create -f custom-resources.yaml
 
